@@ -9,7 +9,10 @@ set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 set(MAIN_DIR ${CMAKE_SOURCE_DIR}/main)
 
 set(SOURCES
-    # ${SOURCE_DIR}/
+    ${SOURCE_DIR}/quadratic_sieve.cpp
+    ${SOURCE_DIR}/rho_pollard.cpp
+    ${SOURCE_DIR}/solovay_strassen.cpp
+    ${SOURCE_DIR}/trial_division.cpp
 )
 
 include_directories(${SOURCE_DIR})
