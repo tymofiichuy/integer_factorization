@@ -16,3 +16,5 @@ set(SOURCES
 )
 
 include_directories(${SOURCE_DIR})
+
+add_executable(test ${TEST_DIR}/test.cpp ${SOURCES})
