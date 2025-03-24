@@ -32,3 +32,146 @@ int quadratic_sieve::legendre_symbol(uint64_t n, uint64_t p){
     res *= legendre_symbol(p, n);
     return res;
 }
+
+void quadratic_sieve::set_base(vector<uint32_t>& primes){
+    base.reserve(primes.size());
+    for(auto it = primes.begin(); it != primes.end(); it++){
+        int ls = legendre_symbol(N, *it);
+        switch(ls){
+            case 0:
+                throw runtime_error(to_string(*it)+" is a factor of N");
+                break;
+            case 1:
+                base.push_back(*it);
+                break;
+            case -1:
+                break;
+        }
+    }
+    base.shrink_to_fit();
+}
+
+bool quadratic_sieve::base_probe_division(vector<int>& coefficients, int number){
+    coefficients.assign(coefficients.size()+1, 0);
+    int index = 1, fails = 0, threshold = static_cast<int>(base.size())/4;
+    bool flag = false;
+
+    if(number < 0){
+        coefficients[0] = 1;
+        number = -number;
+    }
+
+    for(auto it = base.begin(); it != base.end(); it++){
+        while(number%*it==0){
+            flag = true;
+            number/=*it;
+            coefficients[index]++;
+        }
+        index++;
+        if(!flag){
+            fails++;
+        }
+        if(fails > threshold){
+            return false;
+        }
+    }
+    return number==1;
+}
+
+void quadratic_sieve::set_matrix(){
+    int sq = sqrt(N);
+    int a, b, counter = 0, size = static_cast<int>(base.size())+1;
+
+    vector<int> temp(base.size()+1, 0);
+    matrix temp_mtr(size);
+    coef_mtr = move(temp_mtr);
+
+    while(true){
+        for (int sign : {1, -1}){
+            a = sign*interval + sq;
+            b = a*a-N;
+            if(base_probe_division(temp, b)){
+                for(int i = 0; i < size; i++){
+                    coef_mtr.mtr[i][counter] = temp[i];
+                }
+                counter++;
+            }
+            if(counter == size+1){
+                break;
+            }            
+        }
+        if(counter == size+1){
+            break;
+        }
+        else{
+            interval++;  
+        }
+    }
+}
+
+void quadratic_sieve::gaussian_elimination(){
+    int size = coef_mtr.get_size(), pivot;
+    echelon_mtr = coef_mtr;
+    for(int i = 0; i < size; i++){
+        for(int j = 0; j < size; j++){
+            echelon_mtr.mtr[i][j] %= echelon_mtr.mtr[i][j];
+        }
+    }
+    for(int col = 0; col < size; col++){
+        pivot = echelon_mtr.find_pivot(col);
+        if(pivot == size){
+            continue;
+        }
+        else{
+            echelon_mtr.swap(col, pivot);
+            for(int i = 0; i < size; i++){
+                if(echelon_mtr.mtr[i][col]){
+                    echelon_mtr.inplace_row_xor(i, col);
+                }
+            }            
+        }
+    }
+}
+
+uint64_t quadratic_sieve::factor(uint64_t in){
+    int row = 0;
+    bool flag;
+    matrix temp_mtr;
+    vector<bool> solution(echelon_mtr.get_size());
+
+    N = in;
+    sieve_of_eratosthenes soe;
+    soe.sieve(750);
+    set_base(soe.primes);
+    set_matrix();
+    gaussian_elimination();
+
+    while(true){
+        temp_mtr = echelon_mtr;
+        solution.assign(solution.size(), false);
+        flag = true;
+        row = echelon_mtr.find_zero_row(row);
+        if(row == -1){
+            break;
+        }
+        else{
+            solution[row] = true;
+            for(int i = 0; i < echelon_mtr.get_size(); i++){
+                if(temp_mtr.mtr[i][row]){
+                    if(echelon_mtr.mtr[i][i]){
+                        temp_mtr.inplace_col_xor(i,row);
+                    }
+                    else{
+                        flag = false;
+                        row++;
+                        break;
+                    }
+                    solution[i] = true;
+                }
+                if(flag){
+                    //form (X, Y) pair
+                }
+            }
+        }
+    }
+}

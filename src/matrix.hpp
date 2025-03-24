@@ -3,10 +3,9 @@
 #include<cstring>
 
 class matrix{
-private:
-    bool** mtr;
     int size;
 public:
+    bool** mtr;
     int get_size();
 
     void swap(int ind1, int ind2);
@@ -16,6 +15,7 @@ public:
     int find_zero_row(int from);
 
     matrix& operator=(matrix&& other);
+    matrix& operator=(const matrix& other);
     matrix(int size);
     matrix(matrix&& other);
     matrix(const matrix& other);

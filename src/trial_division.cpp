@@ -3,6 +3,7 @@
 using namespace std;
 
 void sieve_of_eratosthenes::joint_sieving(uint32_t high){
+    flag_array.clear();
     flag_array.resize(static_cast<size_t>(high), true);
     //fill(flag_array.begin()+1, flag_array.end(), true);
     flag_array[0]=false;
@@ -31,7 +32,7 @@ void sieve_of_eratosthenes::joint_sieving(uint32_t high){
 
 void sieve_of_eratosthenes::sieve(uint32_t high){
     if(segmentation){
-        throw runtime_error("not_implemented_yet");
+        throw runtime_error("not implemented yet");
     }
     else{
         joint_sieving(high);

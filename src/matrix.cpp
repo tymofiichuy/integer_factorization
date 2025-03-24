@@ -29,7 +29,7 @@ matrix::matrix(matrix&& other): size(other.size), mtr(other.mtr){
 matrix::matrix(const matrix& other): size(other.size){
     mtr = new bool*[size];
     for(int i = 0; i < size; i++){
-        mtr[i] = new bool[size]();
+        mtr[i] = new bool[size];
         memcpy(mtr[i], other.mtr[i], sizeof(bool)*size);
     }  
 }
@@ -49,6 +49,27 @@ matrix& matrix::operator=(matrix&& other){
 
         other.mtr = nullptr;
         other.size = 0;
+    }
+
+    return *this;
+}
+
+matrix& matrix::operator=(const matrix& other){
+    if(this != &other){
+        if(mtr){
+            for(int i = 0; i < size; i++){
+                delete[] mtr[i];
+            }
+            delete[] mtr;                              
+        }
+
+
+        size = other.size;
+        mtr = new bool*[size];
+        for(int i = 0; i < size; i++){
+            mtr[i] = new bool[size];
+            memcpy(mtr[i], other.mtr[i], sizeof(bool)*size);
+        } 
     }
 
     return *this;
@@ -74,7 +95,7 @@ void matrix::inplace_col_xor(int ind1, int ind2){
 
 int matrix::find_pivot(int col){
     int ind = 0;
-    while(mtr[ind][col]==0){
+    while(mtr[ind][col]==0&&ind<size){
         ind++;
     }
     return ind;
