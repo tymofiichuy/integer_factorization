@@ -49,11 +49,17 @@ void quadratic_sieve::set_base(vector<uint32_t>& primes){
         }
     }
     base.shrink_to_fit();
+
+    //remove later!!!
+    for(int i = 0; i < base.size(); i++){
+        cout << base[i] << " ";
+    }
+    cout << "\n";
 }
 
 bool quadratic_sieve::base_probe_division(vector<int>& coefficients, int number){
-    coefficients.assign(coefficients.size()+1, 0);
-    int index = 1, fails = 0, threshold = static_cast<int>(base.size())/4;
+    coefficients.assign(coefficients.size(), 0);
+    int index = 1, fails = 0, threshold = static_cast<int>(base.size())/2;
     bool flag = false;
 
     if(number < 0){
@@ -79,7 +85,7 @@ bool quadratic_sieve::base_probe_division(vector<int>& coefficients, int number)
 }
 
 void quadratic_sieve::set_matrix(){
-    int sq = sqrt(N);
+    int sq = static_cast<int>(sqrt(N));
     int a, b, counter = 0, size = static_cast<int>(base.size())+1;
 
     vector<int> temp(base.size()+1, 0);
@@ -89,18 +95,20 @@ void quadratic_sieve::set_matrix(){
     while(true){
         for (int sign : {1, -1}){
             a = sign*interval + sq;
-            b = a*a-N;
+            b = a*a-static_cast<int>(N);
             if(base_probe_division(temp, b)){
+                a_vector.push_back(a);
+                b_vector.push_back(b);
                 for(int i = 0; i < size; i++){
                     coef_mtr.mtr[i][counter] = temp[i];
                 }
                 counter++;
             }
-            if(counter == size+1){
+            if(counter == size){
                 break;
             }            
         }
-        if(counter == size+1){
+        if(counter == size){
             break;
         }
         else{
@@ -114,7 +122,8 @@ void quadratic_sieve::gaussian_elimination(){
     echelon_mtr = coef_mtr;
     for(int i = 0; i < size; i++){
         for(int j = 0; j < size; j++){
-            echelon_mtr.mtr[i][j] %= echelon_mtr.mtr[i][j];
+            //echelon_mtr.mtr[i][j] %= echelon_mtr.mtr[i][j];
+            echelon_mtr.mtr[i][j] %= 2;
         }
     }
     for(int col = 0; col < size; col++){
@@ -125,11 +134,20 @@ void quadratic_sieve::gaussian_elimination(){
         else{
             echelon_mtr.swap(col, pivot);
             for(int i = 0; i < size; i++){
-                if(echelon_mtr.mtr[i][col]){
-                    echelon_mtr.inplace_row_xor(i, col);
+                if(echelon_mtr.mtr[i][col]==1&&i!=col){
+                    //(i, col)?
+                    echelon_mtr.inplace_row_xor(col, i);
                 }
             }            
         }
+        // remove later!!!
+        // for(int i = 0; i < echelon_mtr.get_size(); i++){
+        //     for(int j = 0; j < echelon_mtr.get_size(); j++){
+        //         cout << echelon_mtr.mtr[i][j] << " ";
+        //     }
+        //     cout << "\n";
+        // }
+        // cout << "\n";
     }
 }
 
@@ -141,16 +159,24 @@ uint64_t quadratic_sieve::factor(uint64_t in){
 
     N = in;
     sieve_of_eratosthenes soe;
-    soe.sieve(750);
+    //change later!!!
+    soe.sieve(28);
     try{
         set_base(soe.primes);        
     }
     catch(runtime_error err){
         cerr << err.what();
+        return 0;
     }
     set_matrix();
     gaussian_elimination();
-    solution.resize(echelon_mtr.get_size());    
+    solution.resize(echelon_mtr.get_size());
+    
+    //remove later!!!
+    for(int i = 0; i < a_vector.size(); i++){
+        cout << a_vector[i] << "--" << b_vector[i] << " ";
+    }
+    cout << "\n";
 
     while(true){
         temp_mtr = echelon_mtr;
@@ -158,7 +184,8 @@ uint64_t quadratic_sieve::factor(uint64_t in){
         flag = true;
         row = echelon_mtr.find_zero_row(row);
         if(row == -1){
-            break;
+            return 0;
+            //break;
         }
         else{
             solution[row] = true;
@@ -174,10 +201,17 @@ uint64_t quadratic_sieve::factor(uint64_t in){
                     }
                     solution[i] = true;
                 }
-                if(flag){
-                    //form (X, Y) pair
-                }
             }
+            if(flag){
+                //form (X, Y) pair
+
+                //remove later!!!
+                for(int i = 0; i < solution.size(); i++){
+                    cout << solution[i] << " ";
+                }
+                cout << "\n";
+            }
+            row++;
         }
     }
 }

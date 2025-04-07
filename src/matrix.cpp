@@ -15,9 +15,9 @@ matrix::~matrix(){
 }
 
 matrix::matrix(int size): size(size){
-    mtr = new bool*[size];
+    mtr = new int*[size];
     for(int i = 0; i < size; i++){
-        mtr[i] = new bool[size]();
+        mtr[i] = new int[size]();
     }    
 }
 
@@ -27,10 +27,10 @@ matrix::matrix(matrix&& other): size(other.size), mtr(other.mtr){
 }
 
 matrix::matrix(const matrix& other): size(other.size){
-    mtr = new bool*[size];
+    mtr = new int*[size];
     for(int i = 0; i < size; i++){
-        mtr[i] = new bool[size];
-        memcpy(mtr[i], other.mtr[i], sizeof(bool)*size);
+        mtr[i] = new int[size];
+        memcpy(mtr[i], other.mtr[i], sizeof(int)*size);
     }  
 }
 
@@ -65,10 +65,10 @@ matrix& matrix::operator=(const matrix& other){
 
 
         size = other.size;
-        mtr = new bool*[size];
+        mtr = new int*[size];
         for(int i = 0; i < size; i++){
-            mtr[i] = new bool[size];
-            memcpy(mtr[i], other.mtr[i], sizeof(bool)*size);
+            mtr[i] = new int[size];
+            memcpy(mtr[i], other.mtr[i], sizeof(int)*size);
         } 
     }
 
@@ -76,20 +76,22 @@ matrix& matrix::operator=(const matrix& other){
 }
 
 void matrix::swap(int ind1, int ind2){
-    bool* temp = mtr[ind1];
+    int* temp = mtr[ind1];
     mtr[ind1] = mtr[ind2];
     mtr[ind2] = temp;
 }
 
 void matrix::inplace_row_xor(int ind1, int ind2){
     for(int i = 0; i < size; i++){
-        mtr[ind2][i] ^= mtr[ind1][i];
+        mtr[ind2][i] += mtr[ind1][i];
+        mtr[ind2][i] %= 2;
     }
 }
 
 void matrix::inplace_col_xor(int ind1, int ind2){
     for(int i = 0; i < size; i++){
-        mtr[i][ind2] ^= mtr[i][ind1];
+        mtr[i][ind2] += mtr[i][ind1];
+        mtr[i][ind2] %= 2;
     }
 }
 
@@ -102,11 +104,11 @@ int matrix::find_pivot(int col){
 }
 
 int matrix::find_zero_row(int from){
-    bool flag;
+    int flag;
     for(int i = from; i < size; i++){
         flag = true;
         for(int j = 0; j < size; j ++){
-            if(mtr[i][j]){
+            if(mtr[i][j] != 0){
                 flag = false;
                 break;
             }

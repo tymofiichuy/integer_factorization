@@ -49,6 +49,9 @@ private:
     matrix echelon_mtr;
     int interval = 0;
 
+    std::vector<int> a_vector;
+    std::vector<int> b_vector;
+
     int legendre_symbol(uint64_t n, uint64_t p);
     void set_base(std::vector<uint32_t>& primes);
 

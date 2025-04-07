@@ -5,7 +5,7 @@
 class matrix{
     int size;
 public:
-    bool** mtr;
+    int** mtr;
     int get_size();
 
     void swap(int ind1, int ind2);
