@@ -137,14 +137,20 @@ uint64_t quadratic_sieve::factor(uint64_t in){
     int row = 0;
     bool flag;
     matrix temp_mtr;
-    vector<bool> solution(echelon_mtr.get_size());
+    vector<bool> solution;
 
     N = in;
     sieve_of_eratosthenes soe;
     soe.sieve(750);
-    set_base(soe.primes);
+    try{
+        set_base(soe.primes);        
+    }
+    catch(runtime_error err){
+        cerr << err.what();
+    }
     set_matrix();
     gaussian_elimination();
+    solution.resize(echelon_mtr.get_size());    
 
     while(true){
         temp_mtr = echelon_mtr;

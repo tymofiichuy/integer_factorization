@@ -44,16 +44,16 @@ class quadratic_sieve final:public factorization_algorithm{
 private:
     uint64_t N;
 
-    vector<uint32_t> base;
+    std::vector<uint32_t> base;
     matrix coef_mtr;
     matrix echelon_mtr;
     int interval = 0;
 
     int legendre_symbol(uint64_t n, uint64_t p);
-    void set_base(vector<uint32_t>& primes);
+    void set_base(std::vector<uint32_t>& primes);
 
     //coefficients array size must match base size!
-    bool base_probe_division(vector<int>& coefficients, int number);
+    bool base_probe_division(std::vector<int>& coefficients, int number);
     void set_matrix();
     void gaussian_elimination();  
 public:

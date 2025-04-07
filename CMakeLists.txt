@@ -13,6 +13,7 @@ set(SOURCES
     ${SOURCE_DIR}/rho_pollard.cpp
     ${SOURCE_DIR}/solovay_strassen.cpp
     ${SOURCE_DIR}/trial_division.cpp
+    ${SOURCE_DIR}/matrix.cpp
 )
 
 include_directories(${SOURCE_DIR})
