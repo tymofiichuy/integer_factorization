@@ -1,4 +1,5 @@
 #include "factorization.hpp"
+#include "long_arithmetic.hpp"
 
 using namespace std;
 
@@ -115,6 +116,13 @@ void quadratic_sieve::set_matrix(){
             interval++;  
         }
     }
+    for(int i = 0; i < coef_mtr.get_size(); i++){
+        for(int j = 0; j < coef_mtr.get_size(); j++){
+            cout << coef_mtr.mtr[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    cout << "\n\n";
 }
 
 void quadratic_sieve::gaussian_elimination(){
@@ -149,10 +157,17 @@ void quadratic_sieve::gaussian_elimination(){
         // }
         // cout << "\n";
     }
+    for(int i = 0; i < echelon_mtr.get_size(); i++){
+        for(int j = 0; j < echelon_mtr.get_size(); j++){
+            cout << echelon_mtr.mtr[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    cout << "\n";
 }
 
 uint64_t quadratic_sieve::factor(uint64_t in){
-    int row = 0;
+    int row = -1;
     bool flag;
     matrix temp_mtr;
     vector<bool> solution;
@@ -182,10 +197,10 @@ uint64_t quadratic_sieve::factor(uint64_t in){
         temp_mtr = echelon_mtr;
         solution.assign(solution.size(), false);
         flag = true;
-        row = echelon_mtr.find_zero_row(row);
+        row = echelon_mtr.find_zero_row(row+1);
         if(row == -1){
             return 0;
-            //break;
+            break;
         }
         else{
             solution[row] = true;
@@ -203,13 +218,36 @@ uint64_t quadratic_sieve::factor(uint64_t in){
                 }
             }
             if(flag){
-                //form (X, Y) pair
-
-                //remove later!!!
                 for(int i = 0; i < solution.size(); i++){
                     cout << solution[i] << " ";
                 }
                 cout << "\n";
+                //form (X, Y) pair
+                long_int res_x(1,2), res_y(1,2), mod(N, 2), temp(1,2), mu(1,2);
+                for(int i = 0; i < base.size(); i++){
+                    if(solution[i]){
+                        long_arithmetic::long_multiply(res_x, long_int(b_vector[i], 2), res_x);
+                        long_arithmetic::long_divide(res_x, mod, res_x, temp);
+
+                        for(int j = 0; j < base.size(); j++){                           
+                            temp = base[j];
+                            modular_arithmetic::long_mod_power(temp, long_int(coef_mtr.mtr[i][j],2), mod, temp);
+                            long_arithmetic::long_multiply(res_y, temp, res_y);
+                            long_arithmetic::long_divide(res_y, mod, res_y, temp);
+                        }
+                    }
+                }
+                //find solution
+                modular_arithmetic::mu_calc(mod, mu);
+                modular_arithmetic::long_mod_add(res_x, res_y, mod, mu, temp);
+                modular_arithmetic::steins_algorithm(temp, mod, temp);
+                temp.print_int();
+                if((temp == long_int(1,2))||(temp == long_int(0, 2))){
+                    continue;
+                }
+                else{
+                    temp.print_int();
+                }
             }
             row++;
         }
