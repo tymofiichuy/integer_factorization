@@ -1,5 +1,6 @@
 #include "factorization.hpp"
-#include "long_arithmetic.hpp"
+#include "f_exeption.hpp"
+#include <long_arithmetic.hpp>
 
 using namespace std;
 
@@ -40,7 +41,7 @@ void quadratic_sieve::set_base(vector<uint32_t>& primes){
         int ls = legendre_symbol(N, *it);
         switch(ls){
             case 0:
-                throw runtime_error(to_string(*it)+" is a factor of N");
+                throw factor_exception(*it);
                 break;
             case 1:
                 base.push_back(*it);
@@ -173,9 +174,8 @@ int64_t quadratic_sieve::factor(int64_t in){
     try{
         set_base(soe.primes);        
     }
-    catch(runtime_error err){
-        cerr << err.what();
-        return 0;
+    catch(factor_exception err){
+        return err.factor;
     }
     set_matrix();
     gaussian_elimination();
@@ -212,7 +212,6 @@ int64_t quadratic_sieve::factor(int64_t in){
                 }
             }
             if(flag){
-                cout << "solution found\n";
                 // for(int i = 0; i < solution.size(); i++){
                 //     cout << solution[i] << " ";
                 // }
