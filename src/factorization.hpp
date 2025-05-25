@@ -55,7 +55,6 @@ private:
     int legendre_symbol(int64_t n, int64_t p);
     void set_base(std::vector<uint32_t>& primes);
 
-    //coefficients array size must match base size!
     bool base_probe_division(std::vector<int>& coefficients, int64_t number);
     void set_matrix();
     void gaussian_elimination();  
@@ -68,9 +67,9 @@ private:
     std::vector<bool> flag_array;
 
     void joint_sieving(uint32_t high);
-    void segment_sieving(uint32_t low, uint32_t high);
+    //void segment_sieving(uint32_t low, uint32_t high);
 public:
-    bool segmentation = false;
+    //bool segmentation = false;
     std::vector<uint32_t> primes;
 
     void sieve(uint32_t high);

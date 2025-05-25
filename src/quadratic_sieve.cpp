@@ -51,12 +51,6 @@ void quadratic_sieve::set_base(vector<uint32_t>& primes){
         }
     }
     base.shrink_to_fit();
-
-    //remove later!!!
-    // for(int i = 0; i < base.size(); i++){
-    //     cout << base[i] << " ";
-    // }
-    // cout << "\n";
 }
 
 bool quadratic_sieve::base_probe_division(vector<int>& coefficients, int64_t number){
@@ -110,13 +104,6 @@ void quadratic_sieve::set_matrix(){
             interval++;  
         }
     }
-    // for(int i = 0; i < coef_mtr.get_size(); i++){
-    //     for(int j = 0; j < coef_mtr.get_size(); j++){
-    //         cout << coef_mtr.mtr[i][j] << " ";
-    //     }
-    //     cout << "\n";
-    // }
-    // cout << "\n";
 }
 
 void quadratic_sieve::gaussian_elimination(){
@@ -142,22 +129,7 @@ void quadratic_sieve::gaussian_elimination(){
                 }
             }            
         }
-        // remove later!!!
-        // for(int i = 0; i < echelon_mtr.get_size(); i++){
-        //     for(int j = 0; j < echelon_mtr.get_size(); j++){
-        //         cout << echelon_mtr.mtr[i][j] << " ";
-        //     }
-        //     cout << "\n";
-        // }
-        // cout << "\n";
     }
-    // for(int i = 0; i < echelon_mtr.get_size(); i++){
-    //     for(int j = 0; j < echelon_mtr.get_size(); j++){
-    //         cout << echelon_mtr.mtr[i][j] << " ";
-    //     }
-    //     cout << "\n";
-    // }
-    // cout << "\n";
 }
 
 int64_t quadratic_sieve::factor(int64_t in){
@@ -180,12 +152,6 @@ int64_t quadratic_sieve::factor(int64_t in){
     set_matrix();
     gaussian_elimination();
     solution.resize(echelon_mtr.get_size());
-    
-    // remove later!!!
-    // for(int i = 0; i < a_vector.size(); i++){
-    //     cout << a_vector[i] << "--" << b_vector[i] << " ";
-    // }
-    // cout << "\n";
 
     while(true){
         temp_mtr = echelon_mtr;
@@ -212,11 +178,6 @@ int64_t quadratic_sieve::factor(int64_t in){
                 }
             }
             if(flag){
-                // for(int i = 0; i < solution.size(); i++){
-                //     cout << solution[i] << " ";
-                // }
-                // cout << "\n";
-                //form (X, Y) pair
                 vector<int> powers;
                 powers.resize(base.size());
                 long_int res_x(1,2), res_y(1,2), mod(static_cast<uint64_t>(N), 2), temp(1,2), mu(1,2);
@@ -238,21 +199,15 @@ int64_t quadratic_sieve::factor(int64_t in){
                     long_arithmetic::long_multiply(res_y, temp, res_y);
                     long_arithmetic::long_divide(res_y, mod, res_y, temp);
                 }
-                //find solution
-                // res_x.print_int();
-                // res_y.print_int();
                 modular_arithmetic::long_mod_add(res_x, res_y, mod, mu, temp);
                 if(temp == long_int(0, 2)){
                     continue;
                 }
-                // temp.print_int();
-                // mod.print_int();
                 modular_arithmetic::steins_algorithm(temp, mod, temp);
                 if(temp == long_int(1,2)){
                     continue;
                 }
                 else{
-                    //temp.print_int();
                     return temp.get_low_digit();
                     break;
                 }

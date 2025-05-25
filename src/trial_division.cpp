@@ -31,10 +31,17 @@ void sieve_of_eratosthenes::joint_sieving(uint32_t high){
 }
 
 void sieve_of_eratosthenes::sieve(uint32_t high){
-    if(segmentation){
-        throw runtime_error("not implemented yet");
-    }
-    else{
         joint_sieving(high);
+}
+
+int64_t trial_division::factor(int64_t in){
+    sieve_of_eratosthenes soe;
+    soe.sieve(static_cast<uint32_t>(sqrt(in)+1));
+
+    for(vector<uint32_t>::iterator it = soe.primes.begin(); it != soe.primes.end(); it++){
+        if(in%*it==0){
+            return *it;
+        }
     }
+    return in;
 }
