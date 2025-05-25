@@ -4,7 +4,7 @@ using namespace std;
 
 int main(){
     quadratic_sieve QS;
-    QS.factor(899);
+    cout << QS.factor(35621);
 
     return 0;
 }

@@ -22,7 +22,7 @@ public:
 
 class factorization_algorithm{
 public:
-    virtual uint64_t factor(uint64_t in) = 0;
+    virtual int64_t factor(int64_t in) = 0;
 
     factorization_algorithm() = default;
     virtual ~factorization_algorithm() = default;
@@ -31,36 +31,36 @@ public:
 class trial_division final:public factorization_algorithm{
 private:
 public:
-    uint64_t factor(uint64_t in) override;
+    int64_t factor(int64_t in) override;
 };
 
 class rho_pollard final:public factorization_algorithm{
 private:
 public:
-    uint64_t factor(uint64_t in) override;
+    int64_t factor(int64_t in) override;
 };
 
 class quadratic_sieve final:public factorization_algorithm{
 private:
-    uint64_t N;
+    int64_t N;
 
     std::vector<uint32_t> base;
     matrix coef_mtr;
     matrix echelon_mtr;
     int interval = 0;
 
-    std::vector<int> a_vector;
-    std::vector<int> b_vector;
+    std::vector<int64_t> a_vector;
+    std::vector<int64_t> b_vector;
 
-    int legendre_symbol(uint64_t n, uint64_t p);
+    int legendre_symbol(int64_t n, int64_t p);
     void set_base(std::vector<uint32_t>& primes);
 
     //coefficients array size must match base size!
-    bool base_probe_division(std::vector<int>& coefficients, int number);
+    bool base_probe_division(std::vector<int>& coefficients, int64_t number);
     void set_matrix();
     void gaussian_elimination();  
 public:
-    uint64_t factor(uint64_t in) override;
+    int64_t factor(int64_t in) override;
 };
 
 class sieve_of_eratosthenes{

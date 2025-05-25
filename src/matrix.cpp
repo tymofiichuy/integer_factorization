@@ -97,7 +97,7 @@ void matrix::inplace_col_xor(int ind1, int ind2){
 
 int matrix::find_pivot(int col){
     int ind = 0;
-    while(mtr[ind][col]==0&&ind<size){
+    while((ind<size)&&(mtr[ind][col]==0)){
         ind++;
     }
     return ind;
