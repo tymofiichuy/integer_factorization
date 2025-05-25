@@ -168,7 +168,8 @@ int64_t quadratic_sieve::factor(int64_t in){
     N = in;
     sieve_of_eratosthenes soe;
     //change later!!!
-    soe.sieve(50);
+    //soe.sieve(50);
+    soe.sieve(static_cast<uint32_t>(pow(exp(sqrt(log2(N)*log2(log2(N)))), (1.0/sqrt(2)))));
     try{
         set_base(soe.primes);        
     }
@@ -211,6 +212,7 @@ int64_t quadratic_sieve::factor(int64_t in){
                 }
             }
             if(flag){
+                cout << "solution found\n";
                 // for(int i = 0; i < solution.size(); i++){
                 //     cout << solution[i] << " ";
                 // }
@@ -241,8 +243,13 @@ int64_t quadratic_sieve::factor(int64_t in){
                 // res_x.print_int();
                 // res_y.print_int();
                 modular_arithmetic::long_mod_add(res_x, res_y, mod, mu, temp);
+                if(temp == long_int(0, 2)){
+                    continue;
+                }
+                // temp.print_int();
+                // mod.print_int();
                 modular_arithmetic::steins_algorithm(temp, mod, temp);
-                if((temp == long_int(1,2))||(temp == long_int(0, 2))){
+                if(temp == long_int(1,2)){
                     continue;
                 }
                 else{
