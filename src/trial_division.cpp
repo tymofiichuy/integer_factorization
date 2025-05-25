@@ -34,7 +34,7 @@ void sieve_of_eratosthenes::sieve(uint32_t high){
         joint_sieving(high);
 }
 
-int64_t trial_division::factor(int64_t in){
+uint64_t trial_division::factor(uint64_t in){
     sieve_of_eratosthenes soe;
     soe.sieve(static_cast<uint32_t>(sqrt(in)+1));
 

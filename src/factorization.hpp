@@ -22,7 +22,7 @@ public:
 
 class factorization_algorithm{
 public:
-    virtual int64_t factor(int64_t in) = 0;
+    virtual uint64_t factor(uint64_t in) = 0;
 
     factorization_algorithm() = default;
     virtual ~factorization_algorithm() = default;
@@ -31,13 +31,13 @@ public:
 class trial_division final:public factorization_algorithm{
 private:
 public:
-    int64_t factor(int64_t in) override;
+    uint64_t factor(uint64_t in) override;
 };
 
 class rho_pollard final:public factorization_algorithm{
 private:
 public:
-    int64_t factor(int64_t in) override;
+    uint64_t factor(uint64_t in) override;
 };
 
 class quadratic_sieve final:public factorization_algorithm{
@@ -59,7 +59,7 @@ private:
     void set_matrix();
     void gaussian_elimination();  
 public:
-    int64_t factor(int64_t in) override;
+    uint64_t factor(uint64_t in) override;
 };
 
 class sieve_of_eratosthenes{

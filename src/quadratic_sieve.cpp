@@ -132,7 +132,7 @@ void quadratic_sieve::gaussian_elimination(){
     }
 }
 
-int64_t quadratic_sieve::factor(int64_t in){
+uint64_t quadratic_sieve::factor(uint64_t in){
     int row = -1;
     bool flag;
     matrix temp_mtr;
