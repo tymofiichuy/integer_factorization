@@ -26,4 +26,6 @@ include_directories(${SOURCE_DIR})
 
 add_executable(td_test ${TEST_DIR}/td_test.cpp ${TD_SOURCES})
 add_executable(qs_test ${TEST_DIR}/qs_test.cpp ${QS_SOURCES})
+add_executable(ss_test ${TEST_DIR}/ss_test.cpp ${QS_SOURCES})
+add_executable(rho_test ${TEST_DIR}/rho_test.cpp ${QS_SOURCES})
 target_link_libraries(qs_test PRIVATE long_modular_arithmetic)

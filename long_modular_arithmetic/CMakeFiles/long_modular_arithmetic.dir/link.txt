@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblong_modular_arithmetic.a CMakeFiles/long_modular_arithmetic.dir/src/long_arithmetic.cpp.o CMakeFiles/long_modular_arithmetic.dir/src/digit.cpp.o CMakeFiles/long_modular_arithmetic.dir/src/modular_arithmetic.cpp.o CMakeFiles/long_modular_arithmetic.dir/src/operators.cpp.o
+/usr/bin/ranlib liblong_modular_arithmetic.a

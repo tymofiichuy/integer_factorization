@@ -13,32 +13,35 @@ static uint64_t gcd(uint64_t a, uint64_t b) {
     }
     return a;
 }
-uint64_t sollovay_strassen::factor(uint64_t p){
+bool solovay_strassen::test(uint64_t p, const int& precision ){
     int k=0;
     
     uint64_t x;
     if(p%2==1){//тамдалі перевірка на псевдопростість за ойлером ітуди підхдять лише непарні
-        while(true){
+        while(k<precision){
             x=1+rand()%p;
             if(gcd(x,p)==1){
                 if(x%p==p-1){//символ якобі потрібного формату при х=-1
                     k++;
                 }
                 else{
-                    cout<<"Число складене"<<endl;
-                    break;  
+                    //cout<<"Число складене"<<endl;
+                    return false;
+                    //break;  
                 }
             }
             if(gcd(x,p)>1){
-                cout<<"Число складене"<<endl;
-                break;
+                //cout<<"Число складене"<<endl;
+                return false;
+                //break;
             }
     
         }
 
     }
     else{
-        cout<<"Число складене"<<endl;
+        //cout<<"Число складене"<<endl;
+        return false;
     }
-    return 0;
+    return true;
 }
