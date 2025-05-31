@@ -5,6 +5,7 @@
 #include<cmath>
 #include<string>
 #include"matrix.hpp"
+#include"tonelli_shanks.hpp"
 
 class primality_test{
 public:
@@ -52,7 +53,7 @@ private:
     std::vector<int64_t> a_vector;
     std::vector<int64_t> b_vector;
 
-    int legendre_symbol(int64_t n, int64_t p);
+    //int legendre_symbol(int64_t n, int64_t p);
     void set_base(std::vector<uint32_t>& primes);
 
     bool base_probe_division(std::vector<int>& coefficients, int64_t number);
