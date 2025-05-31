@@ -1,6 +1,7 @@
 #include "factorization.hpp"
 #include "f_exeption.hpp"
 #include <long_arithmetic.hpp>
+#include <set>
 
 using namespace std;
 
@@ -106,7 +107,7 @@ void quadratic_sieve::set_matrix(){
     // }
 
     int64_t interval = 20*base.size();
-    vector<vector<double>> logarithms;
+    vector<set<double>> logarithms;
     logarithms.resize(2*interval);
     int64_t gen_solution = 0, solution = 0;
     for(int it = 1; it < base.size(); it++){
@@ -115,11 +116,11 @@ void quadratic_sieve::set_matrix(){
         //cout << gen_solution << " " << N%base[it] << " " << base[it] << "\n";
         solution = gen_solution-mod_sq;
         for(int64_t i = ((-interval-solution)/(base[it]))+1; i < ((interval-solution)/(base[it]))-1; i++){
-            logarithms[solution+i*base[it]+interval].push_back(static_cast<double>(log10(base[it])));
+            logarithms[solution+i*base[it]+interval].insert(static_cast<double>(log10(base[it])));
         }
         solution = base[it]-gen_solution-mod_sq;
         for(int64_t i = ((-interval-solution)/(base[it]))+1; i < ((interval-solution)/(base[it]))-1; i++){
-            logarithms[solution+i*base[it]+interval].push_back(static_cast<double>(log10(base[it])));
+            logarithms[solution+i*base[it]+interval].insert(static_cast<double>(log10(base[it])));
         }
     }
 
@@ -142,7 +143,7 @@ void quadratic_sieve::set_matrix(){
                     break;                   
             }
             //cout << Q << " ";
-            if(Q<1.0f){
+            if(abs(Q)<1.5f){
                 if(base_probe_division(temp, b)){
                         a_vector.push_back(a);
                         b_vector.push_back(b);
@@ -152,7 +153,7 @@ void quadratic_sieve::set_matrix(){
                         counter++;
                     }
                 if(counter == size){
-                    cout << i << " " << counter << " ";
+                    //cout << i << " " << counter << " ";
                     return;
                 }            
             }
