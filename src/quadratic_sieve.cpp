@@ -73,7 +73,7 @@ bool quadratic_sieve::base_probe_division(vector<int>& coefficients, int64_t num
 }
 
 void quadratic_sieve::set_matrix(){
-    int64_t sq = static_cast<int64_t>(sqrt(N));
+    int64_t sq = static_cast<int64_t>(sqrt(N)), mod_sq = 0;
     int64_t a, b;
     int counter = 0, size = static_cast<int>(base.size())+1;
 
@@ -105,18 +105,19 @@ void quadratic_sieve::set_matrix(){
     //     }
     // }
 
-    int64_t interval = 10*base.size();
+    int64_t interval = 20*base.size();
     vector<vector<double>> logarithms;
     logarithms.resize(2*interval);
     int64_t gen_solution = 0, solution = 0;
     for(int it = 1; it < base.size(); it++){
+        mod_sq = sq%base[it];
         gen_solution = tonelli_shanks::quad_congruence(0, N, base[it]);
         //cout << gen_solution << " " << N%base[it] << " " << base[it] << "\n";
-        solution = gen_solution-sq;
+        solution = gen_solution-mod_sq;
         for(int64_t i = ((-interval-solution)/(base[it]))+1; i < ((interval-solution)/(base[it]))-1; i++){
             logarithms[solution+i*base[it]+interval].push_back(static_cast<double>(log10(base[it])));
         }
-        solution = base[it]-gen_solution-sq;
+        solution = base[it]-gen_solution-mod_sq;
         for(int64_t i = ((-interval-solution)/(base[it]))+1; i < ((interval-solution)/(base[it]))-1; i++){
             logarithms[solution+i*base[it]+interval].push_back(static_cast<double>(log10(base[it])));
         }
@@ -140,7 +141,8 @@ void quadratic_sieve::set_matrix(){
                     } 
                     break;                   
             }
-            if(Q<5.0f){
+            //cout << Q << " ";
+            if(Q<1.0f){
                 if(base_probe_division(temp, b)){
                         a_vector.push_back(a);
                         b_vector.push_back(b);
@@ -150,6 +152,7 @@ void quadratic_sieve::set_matrix(){
                         counter++;
                     }
                 if(counter == size){
+                    cout << i << " " << counter << " ";
                     return;
                 }            
             }
