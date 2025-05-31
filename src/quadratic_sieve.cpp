@@ -37,6 +37,7 @@ using namespace std;
 // }
 
 void quadratic_sieve::set_base(vector<uint32_t>& primes){
+    base.clear();
     base.reserve(primes.size());
     for(auto it = primes.begin(); it != primes.end(); it++){
         int ls = tonelli_shanks::legendre_symbol(N, *it);
@@ -74,6 +75,10 @@ bool quadratic_sieve::base_probe_division(vector<int>& coefficients, int64_t num
 }
 
 void quadratic_sieve::set_matrix(){
+    a_vector.clear();
+    a_vector.reserve(base.size()+1);
+    b_vector.clear();
+    b_vector.reserve(base.size()+1);
     int64_t sq = static_cast<int64_t>(sqrt(N)), mod_sq = 0;
     int64_t a, b;
     int counter = 0, size = static_cast<int>(base.size())+1;

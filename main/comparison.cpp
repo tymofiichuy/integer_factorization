@@ -48,9 +48,9 @@ int main() {
         //     cout << "Різні дільники.\n";
         // }
         if (factor_rho == factor_qs) {
-            cout << "Found divisor are the same.\n";
+            cout << "Found divisors are the same.\n";
         } else {
-            cout << "Found divisor are different.\n";
+            cout << "Found divisors are different.\n";
         }
 
         cout << "------------------------------------------\n";

@@ -15,13 +15,17 @@ static uint64_t gcd(uint64_t a, uint64_t b) {
 uint64_t rho_pollard::factor(uint64_t n) {
     vector<uint64_t> list;
     list.push_back(2);
-    int t=1;
+    int t=1, counter = 0;
     uint64_t d=1;
 
     uint64_t x=2;
     uint64_t y=2;
 
     while(d==1){
+        counter++;
+        if(counter==1000000000){
+            return 0;
+        }
         x=(x*x+1)%n;
         list.push_back(x);
         y=(y*y+1)%n;
