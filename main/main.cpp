@@ -23,7 +23,8 @@ void factorize(uint64_t n, vector<uint64_t>& result) {
     };
 
     if (is_prime(n)) {
-        cout << "[" << timestamp() << "] Просте число: " << n << endl;
+        // cout << "[" << timestamp() << "] Просте число: " << n << endl;
+        cout << "[" << timestamp() << "] Prime number: " << n << endl;
         result.push_back(n);
         return;
     }
@@ -36,8 +37,10 @@ void factorize(uint64_t n, vector<uint64_t>& result) {
         auto end = high_resolution_clock::now();
 
         if (d != n && d != 1) {
-            cout << "[" << timestamp() << "] Дільник (trial_division): " << d
-                 << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;
+            // cout << "[" << timestamp() << "] Дільник (trial_division): " << d
+            //      << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;
+            cout << "[" << timestamp() << "] Divisor (trial_division): " << d
+                 << ", time: " << duration_cast<milliseconds>(end - start).count() << " ms" << endl;                
             factorize(d, result);
             factorize(n / d, result);
             return;
@@ -52,8 +55,10 @@ void factorize(uint64_t n, vector<uint64_t>& result) {
         auto end = high_resolution_clock::now();
 
         if (d != n && d != 1) {
-            cout << "[" << timestamp() << "] Дільник (rho_pollard): " << d
-                 << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;
+            // cout << "[" << timestamp() << "] Дільник (rho_pollard): " << d
+            //      << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;
+            cout << "[" << timestamp() << "] Divisor (rho_pollard): " << d
+                 << ", time: " << duration_cast<milliseconds>(end - start).count() << " ms" << endl; 
             factorize(d, result);
             factorize(n / d, result);
             return;
@@ -62,7 +67,8 @@ void factorize(uint64_t n, vector<uint64_t>& result) {
 
     // (г) Повторна перевірка на простоту
     if (is_prime(n)) {
-        cout << "[" << timestamp() << "] Просте число: " << n << endl;
+        // cout << "[" << timestamp() << "] Просте число: " << n << endl;
+        cout << "[" << timestamp() << "] Prime number: " << n << endl;
         result.push_back(n);
         return;
     }
@@ -75,20 +81,24 @@ void factorize(uint64_t n, vector<uint64_t>& result) {
         auto end = high_resolution_clock::now();
 
         if (d != n && d != 1) {
-            cout << "[" << timestamp() << "] Дільник (quadratic_sieve): " << d
-                 << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;
+            // cout << "[" << timestamp() << "] Дільник (quadratic_sieve): " << d
+            //      << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;
+            cout << "[" << timestamp() << "] Divisor (quadratic_sieve): " << d
+                 << ", time: " << duration_cast<milliseconds>(end - start).count() << " ms" << endl; 
             factorize(d, result);
             factorize(n / d, result);
             return;
         } else {
-            cout << "[" << timestamp() << "] Я не можу знайти канонічний розклад числа :(" << endl;
+            // cout << "[" << timestamp() << "] Я не можу знайти канонічний розклад числа :(" << endl;
+            cout << "[" << timestamp() << "] I can't find canonical representation :(" << endl;
         }
     }
 }
 
 int main() {
     uint64_t n;
-    cout << "Введіть число: ";
+    // cout << "Введіть число: ";
+    cout << "Enter number: ";
     cin >> n;
 
     auto start_time = chrono::system_clock::now();
@@ -100,12 +110,15 @@ int main() {
     time_t start_c = chrono::system_clock::to_time_t(start_time);
     time_t end_c = chrono::system_clock::to_time_t(end_time);
 
-    cout << "\nКанонічний розклад: ";
+    // cout << "\nКанонічний розклад: ";
+    cout << "\nCanonical representation: ";
     for (uint64_t d : result)
         cout << d << " ";
     cout << endl;
 
-    cout << "Час початку: " << put_time(localtime(&start_c), "%H:%M:%S") << endl;
-    cout << "Час завершення: " << put_time(localtime(&end_c), "%H:%M:%S") << endl;
+    // cout << "Час початку: " << put_time(localtime(&start_c), "%H:%M:%S") << endl;
+    // cout << "Час завершення: " << put_time(localtime(&end_c), "%H:%M:%S") << endl;
+    cout << "Start: " << put_time(localtime(&start_c), "%H:%M:%S") << endl;
+    cout << "End: " << put_time(localtime(&end_c), "%H:%M:%S") << endl;
     return 0;
 }

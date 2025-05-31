@@ -8,7 +8,7 @@
 
 class primality_test{
 public:
-    virtual bool test(uint64_t in, const int& precision);
+    virtual bool test(uint64_t in, const int& precision) = 0;
 
     primality_test() = default;
     virtual ~primality_test() = default;
