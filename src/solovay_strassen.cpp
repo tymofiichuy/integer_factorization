@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdint>
 #include <numeric>
+#include <long_arithmetic.hpp>
 
 using namespace std;
 
@@ -39,18 +40,18 @@ static int jacobi(int64_t a, int64_t p) {
     }
     return (p==1) ? j : 0;
 }
-static uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
-    uint64_t result=1;
-    base=base%mod;
-    while(exp>0){
-        if (exp & 1){
-            result=(__uint128_t)result*base%mod;
-        }
-        base=(__uint128_t)base*base%mod;
-        exp>>=1;
-    }
-    return result;
-}
+// static uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+//     uint64_t result=1;
+//     base=base%mod;
+//     while(exp>0){
+//         if (exp & 1){
+//             result=(__uint128_t)result*base%mod;
+//         }
+//         base=(__uint128_t)base*base%mod;
+//         exp>>=1;
+//     }
+//     return result;
+// }
 bool solovay_strassen::test(uint64_t p, const int& precision ){
     if((p==2)||(p==3)){
         return true;
@@ -59,6 +60,7 @@ bool solovay_strassen::test(uint64_t p, const int& precision ){
         return false;
     }
 
+    long_int l_mod_exp(1,2), l_pow(1,2), l_mod(p,2);
     for(int k=0; k<precision; ++k){
         uint64_t x=2+rand()%(p - 3);
         if (gcd(x, p) > 1){
@@ -70,10 +72,12 @@ bool solovay_strassen::test(uint64_t p, const int& precision ){
             return false;
         }
 
-        uint64_t mod_exp=mod_pow(x, (p-1)/2, p);
+        //uint64_t mod_exp=mod_pow(x, (p-1)/2, p);
+        l_pow = (p-1)/2;
+        modular_arithmetic::long_mod_power(long_int(x,2), l_pow, l_mod, l_mod_exp);
         uint64_t j_mod_p=(j==-1)?p-1:j;
 
-        if (mod_exp!=j_mod_p){
+        if (l_mod_exp.get_low_digit()!=j_mod_p){
             return false;
         }
     }

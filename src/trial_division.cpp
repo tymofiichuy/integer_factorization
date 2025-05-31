@@ -35,12 +35,20 @@ void sieve_of_eratosthenes::sieve(uint32_t high){
 }
 
 uint64_t trial_division::factor(uint64_t in){
-    sieve_of_eratosthenes soe;
-    soe.sieve(static_cast<uint32_t>(sqrt(in)+1));
+    // sieve_of_eratosthenes soe;
+    // soe.sieve(static_cast<uint32_t>(sqrt(in)+1));
 
-    for(vector<uint32_t>::iterator it = soe.primes.begin(); it != soe.primes.end(); it++){
-        if(in%*it==0){
-            return *it;
+    // for(vector<uint32_t>::iterator it = soe.primes.begin(); it != soe.primes.end(); it++){
+    //     if(in%*it==0){
+    //         return *it;
+    //     }
+    // }
+    if(in%2==0){
+        return 2;
+    }
+    for(int i = 3; i < static_cast<int>(sqrt(in)+1); i+=2){
+        if(in%i==0){
+            return i;
         }
     }
     return in;

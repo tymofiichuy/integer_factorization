@@ -84,9 +84,14 @@ void factorize(uint64_t n, vector<uint64_t>& result) {
             // cout << "[" << timestamp() << "] Дільник (quadratic_sieve): " << d
             //      << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;
             cout << "[" << timestamp() << "] Divisor (quadratic_sieve): " << d
-                 << ", time: " << duration_cast<milliseconds>(end - start).count() << " ms" << endl; 
-            factorize(d, result);
-            factorize(n / d, result);
+                 << ", time: " << duration_cast<milliseconds>(end - start).count() << " ms" << endl;
+            if(d == 0){
+                factorize(n, result);
+            }
+            else{
+                factorize(d, result);
+                factorize(n / d, result);                
+            }
             return;
         } else {
             // cout << "[" << timestamp() << "] Я не можу знайти канонічний розклад числа :(" << endl;

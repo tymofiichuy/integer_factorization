@@ -13,31 +13,44 @@ int main() {
         2485021628404193ULL
     };
 
+    rho_pollard RP;
+    quadratic_sieve QS;
+
     for (uint64_t n : numbers) {
-        cout << "Число: " << n << "\n";
+        // cout << "Число: " << n << "\n";
+        cout << "Number: " << n << "\n";
 
         //полард
         auto start_rho = high_resolution_clock::now();
-        uint64_t factor_rho = rho_pollard::factor(n);
+        uint64_t factor_rho = RP.factor(n);
         auto end_rho = high_resolution_clock::now();
         auto dur_rho = duration_cast<milliseconds>(end_rho - start_rho).count();
 
-        cout << "  Поллард ρ-метод: дільник = " << factor_rho
-             << ", час = " << dur_rho << " мс\n";
+        // cout << "  Поллард ρ-метод: дільник = " << factor_rho
+        //      << ", час = " << dur_rho << " мс\n";
+        cout << "  Rho-Pollard: divisor = " << factor_rho
+             << ", time = " << dur_rho << " ms\n";
 
         //сито
         auto start_qs = high_resolution_clock::now();
-        uint64_t factor_qs = quadratic_sieve::factor(n);
+        uint64_t factor_qs = QS.factor(n);
         auto end_qs = high_resolution_clock::now();
         auto dur_qs = duration_cast<milliseconds>(end_qs - start_qs).count();
 
-        cout << "  Метод Померанця: дільник = " << factor_qs
-             << ", час = " << dur_qs << " мс\n";
+        // cout << "  Метод Померанця: дільник = " << factor_qs
+        //      << ", час = " << dur_qs << " мс\n";
+        cout << "  Quadratic sieve: divisor = " << factor_qs
+             << ", time = " << dur_qs << " ms\n";
 
+        // if (factor_rho == factor_qs) {
+        //     cout << " Обидва алгоритми знайшли однаковий дільник.\n";
+        // } else {
+        //     cout << "Різні дільники.\n";
+        // }
         if (factor_rho == factor_qs) {
-            cout << " Обидва алгоритми знайшли однаковий дільник.\n";
+            cout << "Found divisor are the same.\n";
         } else {
-            cout << "Різні дільники.\n";
+            cout << "Found divisor are different.\n";
         }
 
         cout << "------------------------------------------\n";
