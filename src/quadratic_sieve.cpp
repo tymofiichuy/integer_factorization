@@ -81,27 +81,78 @@ void quadratic_sieve::set_matrix(){
     matrix temp_mtr(size);
     coef_mtr = move(temp_mtr);
 
-    while(true){
+    // while(true){
+    //     for (int sign : {1, -1}){
+    //         a = sign*interval + sq;
+    //         b = a*a-static_cast<int64_t>(N);
+    //         if(base_probe_division(temp, b)){
+    //             a_vector.push_back(a);
+    //             b_vector.push_back(b);
+    //             for(int i = 0; i < size; i++){
+    //                 coef_mtr.mtr[i][counter] = temp[i];
+    //             }
+    //             counter++;
+    //         }
+    //         if(counter == size){
+    //             break;
+    //         }            
+    //     }
+    //     if(counter == size){
+    //         break;
+    //     }
+    //     else{
+    //         interval++;  
+    //     }
+    // }
+
+    int64_t interval = 10*base.size();
+    vector<vector<double>> logarithms;
+    logarithms.resize(2*interval);
+    int64_t gen_solution = 0, solution = 0;
+    for(int it = 1; it < base.size(); it++){
+        gen_solution = tonelli_shanks::quad_congruence(0, N, base[it]);
+        //cout << gen_solution << " " << N%base[it] << " " << base[it] << "\n";
+        solution = gen_solution-sq;
+        for(int64_t i = ((-interval-solution)/(base[it]))+1; i < ((interval-solution)/(base[it]))-1; i++){
+            logarithms[solution+i*base[it]+interval].push_back(static_cast<double>(log10(base[it])));
+        }
+        solution = base[it]-gen_solution-sq;
+        for(int64_t i = ((-interval-solution)/(base[it]))+1; i < ((interval-solution)/(base[it]))-1; i++){
+            logarithms[solution+i*base[it]+interval].push_back(static_cast<double>(log10(base[it])));
+        }
+    }
+
+    double Q = 0;
+    for(int i = 1; i <= interval; i++){
         for (int sign : {1, -1}){
-            a = sign*interval + sq;
+            a = sign*i + sq;
             b = a*a-static_cast<int64_t>(N);
-            if(base_probe_division(temp, b)){
-                a_vector.push_back(a);
-                b_vector.push_back(b);
-                for(int i = 0; i < size; i++){
-                    coef_mtr.mtr[i][counter] = temp[i];
-                }
-                counter++;
+            Q = static_cast<double>(log10(abs(b)));
+            switch(sign){
+                case 1:
+                    for(auto it = logarithms[i*sign+interval-1].begin(); it != logarithms[i*sign+interval-1].end(); it++){
+                        Q -= *it;
+                    } 
+                    break;
+                case -1:
+                    for(auto it = logarithms[i*sign+interval].begin(); it != logarithms[i*sign+interval].end(); it++){
+                        Q -= *it;
+                    } 
+                    break;                   
             }
-            if(counter == size){
-                break;
-            }            
-        }
-        if(counter == size){
-            break;
-        }
-        else{
-            interval++;  
+            if(Q<5.0f){
+                if(base_probe_division(temp, b)){
+                        a_vector.push_back(a);
+                        b_vector.push_back(b);
+                        for(int i = 0; i < size; i++){
+                            coef_mtr.mtr[i][counter] = temp[i];
+                        }
+                        counter++;
+                    }
+                if(counter == size){
+                    return;
+                }            
+            }
         }
     }
 }

@@ -5,11 +5,48 @@
 
 using namespace std;
 
+// int tonelli_shanks::legendre_symbol(int64_t n, int64_t p){
+//     int res = 1, counter = 0;
+//     long_int l_pow(1,2);
+//     uint64_t low;
+
+//     n %= p;
+
+//     if(n==0){
+//         return 0;
+//     }
+//     while((n&1)==0){
+//         counter++;
+//         n >>= 1;
+//     }
+//     if(counter%2==1){
+//         //pow = (p*p-1)/8;
+//         l_pow = p;
+//         long_arithmetic::long_multiply(l_pow, l_pow, l_pow);
+//         long_arithmetic::long_sub(l_pow, long_int(1,2), l_pow);
+//         low = l_pow.get_low_digit();
+//         if((low>>3)%2==1){
+//             res *= -1;
+//         }
+//     }        
+//     if(n==1){
+//         return res;
+//     }
+
+//     //pow = (n-1)*(p-1)/4;
+//     l_pow = p-1;
+//     long_arithmetic::long_multiply(l_pow, long_int(n-1,2), l_pow);
+//     low = l_pow.get_low_digit();
+//     if((low>>2)%2==1){
+//         res *= -1;
+//     }
+//     res *= legendre_symbol(p, n);
+//     return res;
+// }
+
 int tonelli_shanks::legendre_symbol(int64_t n, int64_t p){
     int res = 1, counter = 0;
-    long_int l_pow(1,2);
-    uint64_t low;
-    bool flag;
+    uint64_t pow;
 
     n %= p;
 
@@ -21,12 +58,8 @@ int tonelli_shanks::legendre_symbol(int64_t n, int64_t p){
         n >>= 1;
     }
     if(counter%2==1){
-        //pow = (p*p-1)/8;
-        l_pow = p;
-        long_arithmetic::long_multiply(l_pow, l_pow, l_pow);
-        long_arithmetic::long_sub(l_pow, long_int(1,2), l_pow);
-        low = l_pow.get_low_digit();
-        if((low>>3)%2==1){
+        pow = (p*p-1)/8;
+        if(pow%2==1){
             res *= -1;
         }
     }        
@@ -34,11 +67,8 @@ int tonelli_shanks::legendre_symbol(int64_t n, int64_t p){
         return res;
     }
 
-    //pow = (n-1)*(p-1)/4;
-    l_pow = p-1;
-    long_arithmetic::long_multiply(l_pow, long_int(n-1,2), l_pow);
-    low = l_pow.get_low_digit();
-    if((low>>2)%2==1){
+    pow = (n-1)*(p-1)/4;
+    if(pow%2==1){
         res *= -1;
     }
     res *= legendre_symbol(p, n);
@@ -46,6 +76,8 @@ int tonelli_shanks::legendre_symbol(int64_t n, int64_t p){
 }
 
 int64_t tonelli_shanks::quad_congruence(int64_t a, int64_t n, int64_t mod){
+    n %= mod;
+
     if(tonelli_shanks::legendre_symbol(n, mod) != 1){
         return 0;
     }
