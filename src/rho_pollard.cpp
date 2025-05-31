@@ -14,24 +14,28 @@ static uint64_t gcd(uint64_t a, uint64_t b) {
 
 uint64_t rho_pollard::factor(uint64_t n) {
     vector<uint64_t> list;
-    list.push_back(1);
-    uint64_t x;
+    list.push_back(2);
     int t=1;
     uint64_t d=1;
-    uint64_t k=0;
 
-    while (d==1) {
-        for (int i=list.size(); i<=2*t; i++) {
-            list.push_back(0);
+    uint64_t x=2;
+    uint64_t y=2;
+
+    while(d==1){
+        x=(x*x+1)%n;
+        list.push_back(x);
+        y=(y*y+1)%n;
+        y=(y*y+1)%n;
+        list.push_back(y);
+        uint64_t diff=(x>y) ? x-y : y-x;
+        d=gcd(diff, n);
+        if(x==y){
+            x=3;
+            y=3;
+            list.clear();
+            list.push_back(3);
+            d=1;
         }
-
-        for (int i=t; i<=2*t; i++) {
-            x = list[i-1];
-            list[i] = (x*x+x+1) %n;
-        }
-
-        k = (list[2*t]-list[t]) %n;
-        d = gcd(k,n);
         t++;
     }
 
