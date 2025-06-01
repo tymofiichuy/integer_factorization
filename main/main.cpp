@@ -35,7 +35,6 @@ void factorize(uint64_t n, vector<uint64_t>& result) {
         auto start = high_resolution_clock::now();
         uint64_t d = trial->factor(n);
         auto end = high_resolution_clock::now();
-
         if (d != n && d != 1) {
             // cout << "[" << timestamp() << "] Дільник (trial_division): " << d
             //      << ", час: " << duration_cast<milliseconds>(end - start).count() << " мс" << endl;

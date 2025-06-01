@@ -46,8 +46,9 @@ uint64_t trial_division::factor(uint64_t in){
     if(in%2==0){
         return 2;
     }
-    for(int i = 3; i < static_cast<int>(sqrt(in)+1); i+=2){
+    for(int64_t i = 3; i < static_cast<int64_t>(sqrt(in)+1); i+=2){
         if(in%i==0){
+            cout << "\n";
             return i;
         }
     }
